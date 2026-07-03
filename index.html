@@ -359,7 +359,6 @@ function load() {
   } catch(e) {}
   initDate();
   syncCfgFields();
-  injectFixedThisMonth();
   renderAll();
 }
 
@@ -538,8 +537,8 @@ function addFixed() {
   if (!desc||!val||val<=0){showToast('Preencha todos os campos ⚠️','');return;}
   const id=Date.now().toString();
   state.fixedItems.push({id,descricao:desc,valor:val,categoria:cat});
-  save();
   injectFixedThisMonth();
+  save();
   document.getElementById('fx-desc').value='';
   document.getElementById('fx-val').value='';
   showToast('Gasto fixo adicionado ✓','tf');
@@ -597,7 +596,6 @@ function clearMonth() {
     return !(d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear());
   });
   save();
-  // Reinjetar os fixos do mês para que continuem aparecendo
   injectFixedThisMonth();
   renderAll();
   showToast('Mês limpo ✓','');
