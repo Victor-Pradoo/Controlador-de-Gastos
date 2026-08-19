@@ -587,18 +587,17 @@ function saveCfg() {
 }
 
 function clearMonth() {
-  if (!confirm('Apagar gastos variáveis e entradas deste mês? Os fixos serão mantidos e relançados.')) return;
+  if (!confirm('Apagar gastos variáveis e entradas deste mês?')) return;
   const now=new Date();
-  const ym=`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
-  // Remove tudo do mês atual (variáveis, entradas E injeções de fixos)
+  // Remove apenas gastos variáveis e entradas do mês atual — fixos não são tocados
   state.expenses=state.expenses.filter(e=>{
+    if (e.tipo==='fixed') return true; // mantém fixos sempre
     const d=new Date(e.data+'T12:00:00');
     return !(d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear());
   });
   save();
-  injectFixedThisMonth();
   renderAll();
-  showToast('Mês limpo ✓','');
+  showToast('Gastos variáveis do mês apagados ✓','');
 }
 
 function clearAll() {
