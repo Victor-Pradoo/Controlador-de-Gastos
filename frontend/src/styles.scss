@@ -1,0 +1,269 @@
+/* =============================================================================
+   Design tokens portados do app legado (legacy/index.html).
+   Ficam globais porque sao a identidade visual, nao detalhe de um componente.
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700&display=swap');
+
+:root {
+  --bg: #0f0f0f;
+  --surface: #1a1a1a;
+  --surface2: #242424;
+  --border: #2e2e2e;
+  --text: #f0ede8;
+  --muted: #7a7a7a;
+  --accent: #c8f060;
+  --danger: #ff6b6b;
+  --warn: #ffb347;
+  --good: #c8f060;
+  --income: #60f0c0;
+  --fixed: #f0a060;
+
+  --font-display: 'Syne', system-ui, sans-serif;
+  --font-mono: 'DM Mono', ui-monospace, monospace;
+
+  --radius: 14px;
+  --radius-sm: 8px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+  height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-display);
+  overscroll-behavior: none;
+}
+
+/* O app foi desenhado para o celular; no desktop centraliza numa coluna. */
+body {
+  display: flex;
+  flex-direction: column;
+  max-width: 480px;
+  min-height: 100dvh;
+  margin: 0 auto;
+}
+
+/* ---------- Utilitarios compartilhados entre features ---------- */
+
+.page {
+  padding: 16px;
+  padding-bottom: 110px;
+}
+
+.page__title {
+  margin-bottom: 16px;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.section-title {
+  margin: 16px 0 10px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.card {
+  padding: 13px 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.mono {
+  font-family: var(--font-mono);
+}
+
+.field {
+  margin-bottom: 14px;
+
+  label {
+    display: block;
+    margin-bottom: 7px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+  }
+
+  input,
+  select {
+    width: 100%;
+    padding: 13px 14px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    color: var(--text);
+    font-family: var(--font-display);
+    font-size: 16px; /* 16px evita o zoom automatico do iOS ao focar. */
+    outline: none;
+    appearance: none;
+    transition: border-color 0.15s;
+
+    &:focus {
+      border-color: var(--accent);
+    }
+  }
+}
+
+.btn {
+  width: 100%;
+  padding: 15px;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  cursor: pointer;
+  transition: opacity 0.15s, transform 0.1s;
+
+  &:active {
+    transform: scale(0.98);
+    opacity: 0.85;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: default;
+  }
+}
+
+.btn--accent {
+  background: var(--accent);
+  color: #0a0a0a;
+}
+
+.btn--income {
+  background: var(--income);
+  color: #0a0a0a;
+}
+
+.btn--fixed {
+  background: var(--fixed);
+  color: #0a0a0a;
+}
+
+.btn--ghost {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--muted);
+}
+
+.chip {
+  padding: 6px 13px;
+  border: 1px solid var(--border);
+  border-radius: 99px;
+  background: var(--surface);
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.15s;
+
+  &.chip--active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #0a0a0a;
+  }
+}
+
+.chip-row {
+  display: flex;
+  gap: 7px;
+  margin-bottom: 16px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Linha de lista reutilizada por gastos fixos, conexoes e afins. */
+.row {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+}
+
+.row__info {
+  flex: 1;
+  min-width: 0;
+}
+
+.row__name {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.row__sub {
+  margin-top: 3px;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.row__delete {
+  width: 26px;
+  height: 26px;
+  flex-shrink: 0;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.total {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  font-size: 11px;
+  color: var(--muted);
+
+  strong {
+    font-size: 18px;
+    color: var(--fixed);
+  }
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.add-link {
+  margin-bottom: 16px;
+  color: var(--accent);
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.materialize {
+  margin-top: 12px;
+}

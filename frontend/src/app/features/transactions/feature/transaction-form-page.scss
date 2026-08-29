@@ -1,0 +1,27 @@
+.tabs {
+  display: flex;
+  gap: 5px;
+  padding: 4px;
+  margin-bottom: 20px;
+  background: var(--surface);
+  border-radius: var(--radius-sm);
+}
+
+.tab {
+  flex: 1;
+  padding: 9px 4px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--muted);
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.tab--expense { background: var(--accent); color: #0a0a0a; }
+.tab--income { background: var(--income); color: #0a0a0a; }
+.tab--fixed { background: var(--fixed); color: #0a0a0a; }

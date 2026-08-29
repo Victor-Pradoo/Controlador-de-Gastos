@@ -1,0 +1,6 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Núcleo compartilhado: primitivos de domínio puros.
+       NÃO deve referenciar nenhum pacote de infraestrutura nem outro projeto. -->
+
+</Project>

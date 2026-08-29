@@ -1,0 +1,104 @@
+.hero {
+  padding: 20px 18px 16px;
+  margin-bottom: 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.hero__label {
+  margin-bottom: 6px;
+  font-size: 10px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.hero__amount {
+  margin-bottom: 16px;
+  font-size: 38px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -2px;
+}
+
+.hero__meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.progress {
+  height: 5px;
+  margin-bottom: 10px;
+  overflow: hidden;
+  background: var(--surface2);
+  border-radius: 99px;
+}
+
+.progress__fill {
+  height: 100%;
+  border-radius: 99px;
+  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.is-good { color: var(--good); }
+.is-warn { color: var(--warn); }
+.is-bad { color: var(--danger); }
+.is-income { color: var(--income); }
+.is-fixed { color: var(--fixed); }
+
+.progress__fill.is-good { background: var(--good); }
+.progress__fill.is-warn { background: var(--warn); }
+.progress__fill.is-bad { background: var(--danger); }
+
+.metrics {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.metric__label {
+  margin-bottom: 6px;
+  font-size: 10px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.7px;
+}
+
+.metric__value {
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.category__row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 5px;
+  font-size: 13px;
+}
+
+.category__name {
+  font-weight: 600;
+}
+
+.category__info {
+  flex: 1;
+  min-width: 0;
+}
+
+.bar {
+  height: 3px;
+  overflow: hidden;
+  background: var(--surface2);
+  border-radius: 99px;
+}
+
+.bar__fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 99px;
+}

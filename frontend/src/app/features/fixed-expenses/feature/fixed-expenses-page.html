@@ -1,0 +1,61 @@
+<section class="page">
+  <h1 class="page__title">Gastos fixos</h1>
+
+  <article class="card total">
+    <span class="mono">Total mensal</span>
+    <strong>{{ total() | brl }}</strong>
+  </article>
+
+  @if (expenses().length) {
+    <div class="stack">
+      @for (expense of expenses(); track expense.id) {
+        <article class="card row">
+          <div class="row__info">
+            <p class="row__name">{{ expense.description }}</p>
+            <p class="row__sub mono">{{ expense.category }} · todo dia {{ expense.dayOfMonth }}</p>
+          </div>
+          <span class="mono">{{ expense.amount | brl }}</span>
+          <button type="button" class="row__delete" aria-label="Desativar" (click)="deactivate(expense)">
+            &times;
+          </button>
+        </article>
+      }
+    </div>
+  } @else {
+    <app-empty-state message="nenhum gasto fixo cadastrado" />
+  }
+
+  <button type="button" class="btn btn--ghost materialize" (click)="materialize()">
+    Gerar lancamentos deste mes
+  </button>
+
+  <h2 class="section-title">Adicionar</h2>
+
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    <div class="field">
+      <label for="fx-description">Descricao</label>
+      <input id="fx-description" type="text" formControlName="description" placeholder="Ex: Aluguel" />
+    </div>
+
+    <div class="field">
+      <label for="fx-amount">Valor (R$)</label>
+      <input id="fx-amount" type="number" inputmode="decimal" step="0.01" formControlName="amount" placeholder="0,00" />
+    </div>
+
+    <div class="field">
+      <label for="fx-category">Categoria</label>
+      <select id="fx-category" formControlName="category">
+        @for (category of categories(); track category.name) {
+          <option [value]="category.name">{{ category.name }}</option>
+        }
+      </select>
+    </div>
+
+    <div class="field">
+      <label for="fx-day">Dia do vencimento</label>
+      <input id="fx-day" type="number" min="1" max="31" formControlName="dayOfMonth" />
+    </div>
+
+    <button type="submit" class="btn btn--fixed" [disabled]="form.invalid">Adicionar gasto fixo</button>
+  </form>
+</section>

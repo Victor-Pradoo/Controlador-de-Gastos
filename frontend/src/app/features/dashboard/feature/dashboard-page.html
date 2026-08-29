@@ -1,0 +1,65 @@
+<section class="page">
+  @if (store.budget(); as budget) {
+    <article class="hero">
+      <p class="hero__label mono">Saldo disponivel</p>
+      <p class="hero__amount" [class]="healthClass()">{{ budget.balance | brl }}</p>
+
+      <div class="progress">
+        <div class="progress__fill" [class]="healthClass()" [style.width.%]="budget.consumedPercentage"></div>
+      </div>
+
+      <div class="hero__meta mono">
+        <span>Gasto: {{ budget.netSpent | brl }}</span>
+        <span>{{ budget.consumedPercentage }}% do orcamento</span>
+      </div>
+    </article>
+
+    <div class="metrics">
+      <article class="card metric">
+        <p class="metric__label mono">Disponivel</p>
+        <p class="metric__value">{{ budget.available | brl }}</p>
+      </article>
+
+      <article class="card metric">
+        <p class="metric__label mono">Reserva ({{ budget.reserveRate }}%)</p>
+        <p class="metric__value">{{ budget.reserveAmount | brl }}</p>
+      </article>
+
+      <article class="card metric">
+        <p class="metric__label mono">Gastos fixos</p>
+        <p class="metric__value is-fixed">{{ budget.fixedExpenses | brl }}</p>
+      </article>
+
+      <article class="card metric">
+        <p class="metric__label mono">Entradas</p>
+        <p class="metric__value is-income">{{ budget.income | brl }}</p>
+      </article>
+    </div>
+  } @else if (store.loading()) {
+    <app-empty-state message="carregando..." />
+  }
+
+  <h2 class="section-title">Por categoria</h2>
+
+  @if (store.categories(); as categories) {
+    @if (categories.length) {
+      <div class="stack">
+        @for (category of categories; track category.category) {
+          <article class="card category">
+            <div class="category__info">
+              <div class="category__row">
+                <span class="category__name">{{ category.category }}</span>
+                <span class="mono">{{ category.total | brl }}</span>
+              </div>
+              <div class="bar">
+                <div class="bar__fill" [style.width.%]="category.percentage"></div>
+              </div>
+            </div>
+          </article>
+        }
+      </div>
+    } @else {
+      <app-empty-state message="nenhum gasto neste mes" />
+    }
+  }
+</section>

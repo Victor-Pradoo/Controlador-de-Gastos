@@ -1,0 +1,41 @@
+<section class="page">
+  <div class="header">
+    <h1 class="page__title">Lancamentos</h1>
+    <a class="add-link" routerLink="/lancamentos/novo">+ Novo</a>
+  </div>
+
+  <div class="chip-row">
+    <button type="button" class="chip" [class.chip--active]="isActive('all')" (click)="store.setFilter('all')">
+      Todos
+    </button>
+    <button type="button" class="chip" [class.chip--active]="isActive('Income')" (click)="store.setFilter('Income')">
+      Entradas
+    </button>
+    <button type="button" class="chip" [class.chip--active]="isActive('FixedExpense')" (click)="store.setFilter('FixedExpense')">
+      Fixos
+    </button>
+
+    @for (category of store.categories(); track category) {
+      <button
+        type="button"
+        class="chip"
+        [class.chip--active]="isActive({ category })"
+        (click)="store.setFilter({ category })"
+      >
+        {{ category }}
+      </button>
+    }
+  </div>
+
+  @if (store.transactions(); as transactions) {
+    @if (transactions.length) {
+      <div class="stack">
+        @for (transaction of transactions; track transaction.id) {
+          <app-transaction-card [transaction]="transaction" (remove)="remove($event)" />
+        }
+      </div>
+    } @else if (!store.loading()) {
+      <app-empty-state message="nenhum lancamento encontrado" />
+    }
+  }
+</section>

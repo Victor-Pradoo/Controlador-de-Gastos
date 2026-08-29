@@ -1,0 +1,35 @@
+<section class="page">
+  <h1 class="page__title">Ajustes</h1>
+
+  <form [formGroup]="form" (ngSubmit)="save()">
+    <div class="field">
+      <label for="salary">Salario liquido (R$)</label>
+      <input id="salary" type="number" inputmode="decimal" step="0.01" formControlName="salary" placeholder="Ex: 5000" />
+    </div>
+
+    <div class="field">
+      <label for="reserveRate">Taxa de reserva (%)</label>
+      <input id="reserveRate" type="number" min="0" max="100" formControlName="reserveRate" />
+    </div>
+
+    <article class="card preview mono">
+      Reserva mensal: <strong>{{ reserveAmount() | brl }}</strong><br />
+      Disponivel para gastar: <strong>{{ available() | brl }}</strong>
+    </article>
+
+    <button type="submit" class="btn btn--accent" [disabled]="form.invalid">Salvar</button>
+  </form>
+
+  <h2 class="section-title">Desenvolvimento</h2>
+
+  <div class="field">
+    <label for="devUser">Usuario de teste (X-User-Id)</label>
+    <input
+      id="devUser"
+      type="text"
+      [value]="devUserId()"
+      placeholder="deixe vazio para usar o usuario padrao"
+      (change)="saveDevUser($any($event.target).value)"
+    />
+  </div>
+</section>

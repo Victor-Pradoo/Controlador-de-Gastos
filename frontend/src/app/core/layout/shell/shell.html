@@ -1,0 +1,31 @@
+<header class="topbar">
+  <span class="topbar__title">Meus Gastos</span>
+
+  <div class="topbar__month">
+    <button type="button" aria-label="Mes anterior" (click)="months.shift(-1)">&lsaquo;</button>
+    <span class="mono">{{ months.label() }}</span>
+    <button type="button" aria-label="Proximo mes" (click)="months.shift(1)">&rsaquo;</button>
+  </div>
+</header>
+
+<main class="content">
+  <router-outlet />
+</main>
+
+<nav class="bottom-nav">
+  @for (item of navItems; track item.path) {
+    <a
+      class="nav-btn"
+      [routerLink]="item.path"
+      routerLinkActive="nav-btn--active"
+      [attr.aria-label]="item.label"
+    >
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path [attr.d]="item.icon" />
+      </svg>
+      {{ item.label }}
+    </a>
+  }
+</nav>
+
+<app-toast />

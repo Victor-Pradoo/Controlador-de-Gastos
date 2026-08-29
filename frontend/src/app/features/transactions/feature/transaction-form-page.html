@@ -1,0 +1,43 @@
+<section class="page">
+  <h1 class="page__title">Novo lancamento</h1>
+
+  <div class="tabs">
+    <button type="button" class="tab" [class.tab--expense]="kind() === 'Expense'" (click)="selectKind('Expense')">
+      Gasto
+    </button>
+    <button type="button" class="tab" [class.tab--income]="kind() === 'Income'" (click)="selectKind('Income')">
+      Entrada
+    </button>
+    <button type="button" class="tab" [class.tab--fixed]="kind() === 'FixedExpense'" (click)="selectKind('FixedExpense')">
+      Fixo avulso
+    </button>
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    <div class="field">
+      <label for="description">Descricao</label>
+      <input id="description" type="text" formControlName="description" placeholder="Ex: Almoco" />
+    </div>
+
+    <div class="field">
+      <label for="amount">Valor (R$)</label>
+      <input id="amount" type="number" inputmode="decimal" step="0.01" formControlName="amount" placeholder="0,00" />
+    </div>
+
+    <div class="field">
+      <label for="category">Categoria</label>
+      <select id="category" formControlName="category">
+        @for (category of categories(); track category.name) {
+          <option [value]="category.name">{{ category.name }}</option>
+        }
+      </select>
+    </div>
+
+    <div class="field">
+      <label for="occurredOn">Data</label>
+      <input id="occurredOn" type="date" formControlName="occurredOn" />
+    </div>
+
+    <button type="submit" class="btn btn--accent" [disabled]="form.invalid">Registrar</button>
+  </form>
+</section>

@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <UserSecretsId>controle-de-gastos-api</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
+    <PackageReference Include="Scalar.AspNetCore" />
+    <PackageReference Include="Serilog.AspNetCore" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <!-- O host e o UNICO projeto que conhece todos os modulos: ele os compoe. -->
+  <ItemGroup>
+    <ProjectReference Include="..\..\Shared\ControleDeGastos.Infrastructure.Shared\ControleDeGastos.Infrastructure.Shared.csproj" />
+    <ProjectReference Include="..\..\Modules\Ledger\ControleDeGastos.Modules.Ledger\ControleDeGastos.Modules.Ledger.csproj" />
+    <ProjectReference Include="..\..\Modules\Budgeting\ControleDeGastos.Modules.Budgeting\ControleDeGastos.Modules.Budgeting.csproj" />
+    <ProjectReference Include="..\..\Modules\Recurrences\ControleDeGastos.Modules.Recurrences\ControleDeGastos.Modules.Recurrences.csproj" />
+    <ProjectReference Include="..\..\Modules\Categorization\ControleDeGastos.Modules.Categorization\ControleDeGastos.Modules.Categorization.csproj" />
+    <ProjectReference Include="..\..\Modules\Banking\ControleDeGastos.Modules.Banking\ControleDeGastos.Modules.Banking.csproj" />
+  </ItemGroup>
+
+</Project>

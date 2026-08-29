@@ -1,0 +1,47 @@
+<section class="page">
+  <h1 class="page__title">Bancos conectados</h1>
+
+  @if (connections().length) {
+    <div class="stack">
+      @for (connection of connections(); track connection.id) {
+        <article class="card row">
+          <div class="row__info">
+            <p class="row__name">{{ connection.institutionName }}</p>
+            <p class="row__sub mono">
+              {{ statusLabel(connection.status) }}
+              @if (connection.lastSyncedAt) {
+                · ultima sync {{ connection.lastSyncedAt | date: 'dd/MM HH:mm' }}
+              }
+            </p>
+          </div>
+
+          <button
+            type="button"
+            class="chip"
+            [disabled]="syncing() === connection.id"
+            (click)="sync(connection)"
+          >
+            {{ syncing() === connection.id ? '...' : 'Sincronizar' }}
+          </button>
+        </article>
+      }
+    </div>
+  } @else {
+    <app-empty-state message="nenhum banco conectado ainda" />
+  }
+
+  <h2 class="section-title">Conectar um banco</h2>
+
+  <button type="button" class="btn btn--ghost" (click)="requestConnectToken()">
+    Gerar connect token
+  </button>
+
+  <form class="connect-form" [formGroup]="form" (ngSubmit)="connect()">
+    <div class="field">
+      <label for="itemId">Item ID devolvido pelo provedor</label>
+      <input id="itemId" type="text" formControlName="itemId" placeholder="Ex: 1a2b3c4d" />
+    </div>
+
+    <button type="submit" class="btn btn--accent" [disabled]="form.invalid">Conectar</button>
+  </form>
+</section>

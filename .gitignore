@@ -1,0 +1,44 @@
+# ---------- .NET ----------
+bin/
+obj/
+[Dd]ebug/
+[Rr]elease/
+artifacts/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+.vs/
+TestResults/
+*.coverage
+*.trx
+coverage*.json
+coverage*.xml
+coverage*.info
+
+# ---------- Node / Angular ----------
+node_modules/
+dist/
+.angular/
+*.tsbuildinfo
+npm-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# ---------- Ambiente / segredos ----------
+.env
+.env.*
+!.env.example
+appsettings.Development.local.json
+secrets.json
+*.pfx
+*.p12
+
+# ---------- Editores / SO ----------
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/launch.json
+!.vscode/tasks.json
+.DS_Store
+Thumbs.db

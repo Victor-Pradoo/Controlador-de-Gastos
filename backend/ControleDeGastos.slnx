@@ -1,0 +1,30 @@
+<Solution>
+  <Folder Name="/src/" />
+  <Folder Name="/src/Api/" />
+  <Folder Name="/src/Modules/" />
+  <Folder Name="/src/Modules/Banking/" />
+  <Folder Name="/src/Modules/Budgeting/" />
+  <Folder Name="/src/Modules/Categorization/" />
+  <Folder Name="/src/Modules/Ledger/" />
+  <Folder Name="/src/Modules/Recurrences/" />
+  <Folder Name="/src/Shared/" />
+  <Folder Name="/tests/">
+    <Project Path="tests/ControleDeGastos.Api.IntegrationTests/ControleDeGastos.Api.IntegrationTests.csproj" />
+    <Project Path="tests/ControleDeGastos.ArchitectureTests/ControleDeGastos.ArchitectureTests.csproj" />
+    <Project Path="tests/ControleDeGastos.Modules.Budgeting.Tests/ControleDeGastos.Modules.Budgeting.Tests.csproj" />
+    <Project Path="tests/ControleDeGastos.Modules.Ledger.Tests/ControleDeGastos.Modules.Ledger.Tests.csproj" />
+  </Folder>
+  <Project Path="src/Api/ControleDeGastos.Api/ControleDeGastos.Api.csproj" />
+  <Project Path="src/Modules/Banking/ControleDeGastos.Modules.Banking.Contracts/ControleDeGastos.Modules.Banking.Contracts.csproj" />
+  <Project Path="src/Modules/Banking/ControleDeGastos.Modules.Banking/ControleDeGastos.Modules.Banking.csproj" />
+  <Project Path="src/Modules/Budgeting/ControleDeGastos.Modules.Budgeting.Contracts/ControleDeGastos.Modules.Budgeting.Contracts.csproj" />
+  <Project Path="src/Modules/Budgeting/ControleDeGastos.Modules.Budgeting/ControleDeGastos.Modules.Budgeting.csproj" />
+  <Project Path="src/Modules/Categorization/ControleDeGastos.Modules.Categorization.Contracts/ControleDeGastos.Modules.Categorization.Contracts.csproj" />
+  <Project Path="src/Modules/Categorization/ControleDeGastos.Modules.Categorization/ControleDeGastos.Modules.Categorization.csproj" />
+  <Project Path="src/Modules/Ledger/ControleDeGastos.Modules.Ledger.Contracts/ControleDeGastos.Modules.Ledger.Contracts.csproj" />
+  <Project Path="src/Modules/Ledger/ControleDeGastos.Modules.Ledger/ControleDeGastos.Modules.Ledger.csproj" />
+  <Project Path="src/Modules/Recurrences/ControleDeGastos.Modules.Recurrences.Contracts/ControleDeGastos.Modules.Recurrences.Contracts.csproj" />
+  <Project Path="src/Modules/Recurrences/ControleDeGastos.Modules.Recurrences/ControleDeGastos.Modules.Recurrences.csproj" />
+  <Project Path="src/Shared/ControleDeGastos.Infrastructure.Shared/ControleDeGastos.Infrastructure.Shared.csproj" />
+  <Project Path="src/Shared/ControleDeGastos.SharedKernel/ControleDeGastos.SharedKernel.csproj" />
+</Solution>
