@@ -1,6 +1,6 @@
 import { Injectable, computed, inject, signal } from '@angular/core';
 import { forkJoin } from 'rxjs';
-import { MonthService } from '../../../shared/month.service';
+import { MonthService } from '../../../core/competence/month.service';
 import { MonthlyBudget } from '../../../shared/models/budget';
 import { CategoryTotal } from '../../../shared/models/transaction';
 import { TransactionsApi } from '../../transactions/data-access/transactions.api';

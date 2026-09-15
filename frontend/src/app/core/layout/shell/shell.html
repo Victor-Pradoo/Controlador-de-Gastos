@@ -3,7 +3,16 @@
 
   <div class="topbar__month">
     <button type="button" aria-label="Mes anterior" (click)="months.shift(-1)">&lsaquo;</button>
-    <span class="mono">{{ months.label() }}</span>
+    <span class="mono">
+      {{ months.label() }}
+      <!-- Com dia de virada, a competencia nao e o mes do calendario: mostrar a
+           janela evita o usuario estranhar um gasto de 28/08 aparecendo em setembro. -->
+      @if (months.currentWindow(); as window) {
+        <small class="topbar__window">
+          {{ window.start | date: 'dd/MM' }}&ndash;{{ window.end | date: 'dd/MM' }}
+        </small>
+      }
+    </span>
     <button type="button" aria-label="Proximo mes" (click)="months.shift(1)">&rsaquo;</button>
   </div>
 </header>

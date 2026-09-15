@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { DatePipe } from '@angular/common';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
-import { MonthService } from '../../../shared/month.service';
+import { MonthService } from '../../competence/month.service';
 import { ToastComponent } from '../../../shared/ui/toast';
 
 interface NavItem {
@@ -16,7 +17,7 @@ interface NavItem {
 @Component({
   selector: 'app-shell',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterOutlet, RouterLink, RouterLinkActive, ToastComponent],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive, ToastComponent, DatePipe],
   templateUrl: './shell.html',
   styleUrl: './shell.scss',
 })

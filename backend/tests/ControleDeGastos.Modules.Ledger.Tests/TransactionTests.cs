@@ -24,7 +24,7 @@ public sealed class TransactionTests
 
         Assert.True(result.IsSuccess);
         Assert.Equal(42.56m, result.Value.Amount.Amount);
-        Assert.Equal(new YearMonth(2026, 8), result.Value.Competence);
+        Assert.Equal(Today, result.Value.OccurredOn);
     }
 
     [Theory]

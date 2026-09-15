@@ -62,4 +62,35 @@
       <app-empty-state message="nenhum gasto neste mes" />
     }
   }
+
+  @if (months.isCurrent()) {
+    <h2 class="section-title">Fechamento</h2>
+
+    <article class="card competence">
+      @if (months.currentWindow(); as window) {
+        <p class="competence__window mono">
+          Esta competencia vai de {{ window.start | date: 'dd/MM' }} a {{ window.end | date: 'dd/MM' }}.
+        </p>
+      }
+
+      @if (months.reopenable(); as closed) {
+        <p class="competence__hint">
+          Voce encerrou {{ closed }} na mao, entao os gastos de hoje ja entram aqui.
+        </p>
+
+        <button type="button" class="btn" [disabled]="closing()" (click)="reopenCompetence(closed)">
+          Reabrir {{ closed }}
+        </button>
+      } @else {
+        <p class="competence__hint">
+          Encerrar agora faz os proximos gastos entrarem na competencia seguinte. Os
+          lancamentos com data anterior continuam aqui.
+        </p>
+
+        <button type="button" class="btn" [disabled]="closing()" (click)="closeCompetence()">
+          Encerrar os gastos deste mes
+        </button>
+      }
+    </article>
+  }
 </section>

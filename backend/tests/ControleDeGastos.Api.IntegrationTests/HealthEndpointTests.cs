@@ -9,8 +9,8 @@ namespace ControleDeGastos.Api.IntegrationTests;
 /// Smoke test da composicao: sobe o host de verdade e confirma que os cinco modulos
 /// foram registrados. Nao toca o banco - falha aqui significa erro de DI ou de rota.
 /// </summary>
+[Collection(ApiCollection.Name)]
 public sealed class HealthEndpointTests(ApiFactory factory)
-    : IClassFixture<ApiFactory>
 {
     [Fact]
     public async Task Health_responde_ok_com_os_modulos_registrados()

@@ -87,6 +87,17 @@ body {
   gap: 7px;
 }
 
+/* Aviso de consequencia antes de uma acao - nao e erro, e "leia antes de salvar". */
+.warning {
+  margin: 0 0 14px;
+  padding: 10px 12px;
+  border: 1px solid var(--warn);
+  border-radius: var(--radius-sm);
+  color: var(--warn);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
 .mono {
   font-family: var(--font-mono);
 }

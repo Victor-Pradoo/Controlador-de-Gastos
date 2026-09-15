@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnInit, computed, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MonthService } from '../../../shared/month.service';
+import { MonthService } from '../../../core/competence/month.service';
 import { CategoryDefinition } from '../../../shared/models/category';
 import { FixedExpense } from '../../../shared/models/fixed-expense';
 import { BrlPipe } from '../../../shared/ui/brl.pipe';

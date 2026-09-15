@@ -1,4 +1,4 @@
-using ControleDeGastos.SharedKernel.Abstractions;
+using ControleDeGastos.Modules.Ledger.Contracts;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -38,20 +38,19 @@ public sealed class RecurrenceMaterializationWorker(
     {
         using var scope = scopeFactory.CreateScope();
         var service = scope.ServiceProvider.GetRequiredService<FixedExpenseService>();
-        var clock = scope.ServiceProvider.GetRequiredService<IClock>();
-        var month = YearMonthOf(clock);
+        var ledger = scope.ServiceProvider.GetRequiredService<ILedgerModuleApi>();
 
         foreach (var userId in await service.ListUserIdsWithActiveExpensesAsync(cancellationToken))
         {
-            var created = await service.MaterializeAsync(userId, month, cancellationToken);
+            // A competencia corrente e a da regra de virada do usuario, nao o mes do
+            // calendario: com virada no dia 25, em 28/08 o fixo a materializar e o de setembro.
+            var month = await ledger.GetCurrentCompetenceAsync(userId, cancellationToken);
+            var materialized = await service.MaterializeAsync(userId, month, cancellationToken);
 
-            if (created > 0)
+            if (materialized > 0)
             {
-                logger.LogInformation("Materializados {Count} gasto(s) fixo(s) de {UserId} em {Month}.", created, userId, month);
+                logger.LogInformation("Materializados {Count} gasto(s) fixo(s) de {UserId} em {Month}.", materialized, userId, month);
             }
         }
     }
-
-    private static SharedKernel.Primitives.YearMonth YearMonthOf(IClock clock) =>
-        SharedKernel.Primitives.YearMonth.From(clock.Today);
 }

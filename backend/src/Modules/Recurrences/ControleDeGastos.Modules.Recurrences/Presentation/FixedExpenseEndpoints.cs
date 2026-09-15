@@ -1,4 +1,5 @@
 using ControleDeGastos.Infrastructure.Shared.Http;
+using ControleDeGastos.Modules.Ledger.Contracts;
 using ControleDeGastos.Modules.Recurrences.Application;
 using ControleDeGastos.SharedKernel.Abstractions;
 using Microsoft.AspNetCore.Builder;
@@ -53,11 +54,12 @@ internal static class FixedExpenseEndpoints
         group.MapPost("/materialize", async (
             string? month,
             ICurrentUser currentUser,
-            IClock clock,
+            ILedgerModuleApi ledger,
             FixedExpenseService service,
             CancellationToken cancellationToken) =>
         {
-            var competence = MonthParameter.Resolve(month, clock);
+            var competence = MonthParameter.TryParse(month)
+                ?? await ledger.GetCurrentCompetenceAsync(currentUser.UserId, cancellationToken);
             var created = await service.MaterializeAsync(currentUser.UserId, competence, cancellationToken);
             return Results.Ok(new { month = competence.ToString(), created });
         })

@@ -29,10 +29,24 @@ Duas decisões que carregam peso:
 - **`IsEditable` só para `Manual`.** Lançamento importado não se apaga na mão; a
   fonte da verdade é o extrato ou o cadastro do fixo.
 
-**Expõe** `ILedgerModuleApi`: registrar, listar por mês, totais do mês, totais por
-categoria, checar `ExternalId`.
+- **A competência é derivada, nunca gravada.** `CompetenceCalendar` (função pura)
+  responde a que competência uma data pertence, a partir do dia de virada do usuário
+  e dos encerramentos manuais. Com virada no dia 25, o ciclo 25/08–24/09 é *setembro*.
+  Como é derivada, mudar a regra reclassifica também o histórico — é o comportamento
+  desejado, e é por isso que não existe coluna `Competence`.
 
-**Endpoints** `GET|POST /api/ledger/transactions`, `DELETE .../{id}`, `GET /api/ledger/summary`.
+Toda consulta recorta pela **janela** da competência (`WindowOf`), não pelo primeiro e
+último dia do mês. `Resolve` e `WindowOf` são duas leituras da mesma regra e precisam
+concordar; um teste de propriedade varre 24 meses garantindo que as janelas particionam
+o tempo. Nenhum outro módulo reimplementa essa conta — todos pedem ao contrato.
+
+**Expõe** `ILedgerModuleApi`: registrar, listar por mês, totais do mês, totais por
+categoria, checar `ExternalId`, o calendário de competência, a competência corrente,
+a janela de uma competência e o upsert da ocorrência de um gasto fixo.
+
+**Endpoints** `GET|POST /api/ledger/transactions`, `DELETE .../{id}`,
+`GET /api/ledger/summary`, e a regra de virada em `GET /api/ledger/competence`,
+`PUT .../closing-day`, `POST .../close`, `DELETE .../close/{month}`.
 
 ---
 
@@ -69,10 +83,19 @@ Substitui o `injectFixedThisMonth()` do app legado, com duas correções:
   fixo excluído; aqui o histórico permanece.
 
 `DayOfMonth` é fixado ao último dia disponível em meses curtos (dia 31 em fevereiro
-vira 28).
+vira 28), e a ocorrência é posicionada **dentro da janela da competência** obtida do
+Ledger: com virada no dia 25, um fixo que vence no dia 28 cai em 28/08 para pertencer
+à competência de setembro. Se nenhum vencimento couber na janela, usa o último dia dela.
 
-Um `BackgroundService` materializa a competência corrente ao subir e uma vez por
-dia. Com mais de uma instância isso precisa virar job com lock distribuído.
+A materialização é um *upsert* por (gasto fixo, competência) via
+`SyncRecurrenceOccurrenceAsync`: quando o usuário muda a regra de virada, a ocorrência
+é **reposicionada** em vez de duplicada ou recusada como duplicata — senão a competência
+ficaria sem o fixo. O módulo assina `CompetenceRuleChangedIntegrationEvent` e reconcilia
+a competência corrente e a anterior sozinho.
+
+Um `BackgroundService` materializa a competência corrente — a da regra, não a do
+calendário — ao subir e uma vez por dia. Com mais de uma instância isso precisa virar
+job com lock distribuído.
 
 **Endpoints** `GET|POST /api/fixed-expenses`, `DELETE .../{id}`, `POST .../materialize`.
 
@@ -125,3 +148,20 @@ banco nunca passam por esta aplicação**, ficam no widget da Pluggy.
 
 **Endpoints** `POST /api/banking/connect-token`, `GET|POST /api/banking/connections`,
 `POST /api/banking/connections/{id}/sync`.
+
+---
+
+## Testes que precisam de banco
+
+`ControleDeGastos.Api.DatabaseTests` sobe a API contra um SQL Server de verdade, num
+banco proprio (`ControleDeGastos_IntegrationTests`), com as migrations aplicadas no
+startup. E onde se verifica o que dublê nenhum prova: a traducao das consultas por
+competencia para SQL e a serializacao dos contratos.
+
+A string vem de `ConnectionStrings__Database` quando definida — o CI aponta para um
+container de SQL Server — e cai no LocalDB quando nao esta.
+
+Ele e um projeto separado de `ControleDeGastos.Api.IntegrationTests` (que roda sem
+banco) porque `ModuleHostExtensions` guarda os modulos registrados numa lista
+**estatica**: compor dois hosts no mesmo processo registra cada modulo duas vezes e o
+roteamento quebra com "Duplicate endpoint name".

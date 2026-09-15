@@ -1,8 +1,10 @@
 using ControleDeGastos.Infrastructure.Shared.Modules;
 using ControleDeGastos.Infrastructure.Shared.Persistence;
+using ControleDeGastos.Modules.Ledger.Application.Competence;
 using ControleDeGastos.Modules.Ledger.Application.Transactions;
 using ControleDeGastos.Modules.Ledger.Contracts;
 using ControleDeGastos.Modules.Ledger.Domain;
+using ControleDeGastos.Modules.Ledger.Domain.Competence;
 using ControleDeGastos.Modules.Ledger.Infrastructure;
 using ControleDeGastos.Modules.Ledger.Presentation;
 using ControleDeGastos.SharedKernel.Abstractions;
@@ -26,8 +28,14 @@ public sealed class LedgerModule : IModule
         services.AddScoped<ILedgerUnitOfWork>(sp => sp.GetRequiredService<LedgerDbContext>());
 
         services.AddScoped<ITransactionRepository, TransactionRepository>();
+        services.AddScoped<ICompetenceSettingsRepository, CompetenceSettingsRepository>();
+        services.AddScoped<ICompetenceClosureRepository, CompetenceClosureRepository>();
+        services.AddScoped<ICompetenceCalendarProvider, CompetenceCalendarProvider>();
+
         services.AddScoped<LedgerQueries>();
         services.AddScoped<RegisterTransactionHandler>();
+        services.AddScoped<SyncRecurrenceOccurrenceHandler>();
+        services.AddScoped<CompetenceService>();
         services.AddScoped<DeleteTransactionHandler>();
 
         services.AddScoped<ILedgerModuleApi, LedgerModuleApi>();

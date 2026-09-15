@@ -20,6 +20,44 @@
     <button type="submit" class="btn btn--accent" [disabled]="form.invalid">Salvar</button>
   </form>
 
+  <h2 class="section-title">Competencia</h2>
+
+  <form [formGroup]="competenceForm" (ngSubmit)="saveClosingDay()">
+    <div class="field">
+      <label for="closingDay">Dia de virada</label>
+      <input
+        id="closingDay"
+        type="number"
+        [min]="minClosingDay"
+        [max]="maxClosingDay"
+        formControlName="closingDay"
+        placeholder="deixe vazio para usar o mes do calendario"
+      />
+    </div>
+
+    <article class="card preview mono">
+      @if (closingDay(); as day) {
+        Gastos a partir do dia <strong>{{ day }}</strong> entram na competencia seguinte.<br />
+        @if (currentWindow(); as window) {
+          Competencia atual: <strong>{{ window.start | date: 'dd/MM' }} a {{ window.end | date: 'dd/MM' }}</strong>
+        }
+      } @else {
+        A competencia acompanha o mes do calendario.
+      }
+    </article>
+
+    @if (closingDayChanged()) {
+      <p class="warning">
+        Mudar o dia de virada reclassifica tambem os lancamentos ja registrados: meses
+        fechados podem mudar de total.
+      </p>
+    }
+
+    <button type="submit" class="btn" [disabled]="competenceForm.invalid || !closingDayChanged()">
+      Salvar dia de virada
+    </button>
+  </form>
+
   <h2 class="section-title">Desenvolvimento</h2>
 
   <div class="field">

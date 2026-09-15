@@ -1,5 +1,6 @@
 using ControleDeGastos.Infrastructure.Shared.Http;
 using ControleDeGastos.Modules.Budgeting.Application;
+using ControleDeGastos.Modules.Ledger.Contracts;
 using ControleDeGastos.SharedKernel.Abstractions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -16,11 +17,13 @@ internal static class BudgetEndpoints
         group.MapGet("/", async (
             string? month,
             ICurrentUser currentUser,
-            IClock clock,
+            ILedgerModuleApi ledger,
             BudgetService service,
             CancellationToken cancellationToken) =>
         {
-            var competence = MonthParameter.Resolve(month, clock);
+            // A competencia corrente sai da regra de virada, que vive no Ledger.
+            var competence = MonthParameter.TryParse(month)
+                ?? await ledger.GetCurrentCompetenceAsync(currentUser.UserId, cancellationToken);
             var budget = await service.GetMonthlyBudgetAsync(currentUser.UserId, competence, cancellationToken);
             return Results.Ok(budget);
         })

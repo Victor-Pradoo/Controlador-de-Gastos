@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, effect, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { MonthService } from '../../../shared/month.service';
+import { MonthService } from '../../../core/competence/month.service';
 
 import { EmptyStateComponent } from '../../../shared/ui/empty-state';
 import { TransactionFilter, TransactionsStore } from '../data-access/transactions.store';

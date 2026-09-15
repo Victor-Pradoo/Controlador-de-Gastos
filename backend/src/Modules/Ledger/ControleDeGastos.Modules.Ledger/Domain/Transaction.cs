@@ -66,13 +66,27 @@ public sealed class Transaction : AggregateRoot<Guid>
 
     public DateTimeOffset CreatedAt { get; private set; }
 
-    public YearMonth Competence => YearMonth.From(OccurredOn);
-
     /// <summary>
     /// Lancamento importado do banco ou gerado por recorrencia nao e apagado a mao:
     /// a fonte da verdade e o extrato / o cadastro do fixo.
     /// </summary>
     public bool IsEditable => Source == TransactionSource.Manual;
+
+    /// <summary>
+    /// Reposiciona a ocorrencia de um gasto fixo dentro da janela da competencia,
+    /// depois de o usuario mudar a regra de virada. So faz sentido para lancamento
+    /// gerado por recorrencia: os demais tem a data que o usuario ou o banco informou.
+    /// </summary>
+    internal Result MoveTo(DateOnly occurredOn)
+    {
+        if (Source != TransactionSource.Recurrence)
+        {
+            return Result.Failure(LedgerErrors.NotRepositionable);
+        }
+
+        OccurredOn = occurredOn;
+        return Result.Success();
+    }
 
     public static Result<Transaction> Register(
         Guid userId,

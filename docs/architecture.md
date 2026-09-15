@@ -116,8 +116,11 @@ Regras que espelham as do back-end:
 - Todo componente é standalone e `OnPush`; estado é `signal`.
 - Cada feature é um chunk lazy próprio — quem não abre a tela não baixa o código.
 
-O `MonthService` é a exceção deliberada em `shared/`: o app inteiro raciocina por
-competência, e cada tela ter a sua noção de "mês atual" seria pior.
+O `MonthService` vive em `core/competence/`: o app inteiro raciocina por competência,
+e cada tela ter a sua noção de "mês atual" seria pior. Ele está em `core/` e não em
+`shared/` porque a competência corrente vem do backend — depende da regra de virada
+do usuário — então é estado de app inteiro que faz I/O. É carregado uma vez no
+bootstrap (`provideAppInitializer`) e cai no mês do calendário se a API não responder.
 
 ## Autenticação (pendente)
 

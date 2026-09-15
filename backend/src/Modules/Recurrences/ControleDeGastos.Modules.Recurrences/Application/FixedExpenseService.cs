@@ -63,8 +63,19 @@ public sealed class FixedExpenseService(
 
     public async Task<int> MaterializeAsync(Guid userId, YearMonth month, CancellationToken cancellationToken = default)
     {
+        // A janela vem pronta do Ledger, dono da regra: uma leitura para a competencia
+        // inteira, e nao uma por gasto fixo - nem uma copia da regra deste lado.
+        var window = await ledger.GetCompetenceWindowAsync(userId, month, cancellationToken);
+
+        if (window.IsEmpty)
+        {
+            // Duas competencias encerradas no mesmo dia deixam a do meio sem nenhuma
+            // data possivel - nao ha onde colocar o lancamento.
+            return 0;
+        }
+
         var items = await repository.ListAsync(userId, onlyActive: true, cancellationToken);
-        var created = 0;
+        var materialized = 0;
 
         foreach (var item in items)
         {
@@ -75,19 +86,20 @@ public sealed class FixedExpenseService(
                 item.Description,
                 item.Amount.Amount,
                 item.Category,
-                item.OccurrenceDate(month),
+                item.OccurrenceDate(window),
                 item.ExternalKeyFor(month),
                 item.Id);
 
-            var result = await ledger.RegisterAsync(request, cancellationToken);
+            // Upsert por (gasto fixo, competencia): cria se falta e reposiciona a data
+            // se a regra de virada mudou. Re-executar e sempre seguro.
+            var result = await ledger.SyncRecurrenceOccurrenceAsync(request, cancellationToken);
 
             if (result.IsSuccess)
             {
-                created++;
+                materialized++;
             }
-            else if (result.Error.Code != "ledger.duplicated_external_id")
+            else
             {
-                // Duplicado e o caminho feliz de uma re-execucao; o resto merece log.
                 logger.LogWarning(
                     "Falha ao materializar gasto fixo {FixedExpenseId} em {Month}: {Error}",
                     item.Id,
@@ -96,7 +108,7 @@ public sealed class FixedExpenseService(
             }
         }
 
-        return created;
+        return materialized;
     }
 
     public Task<IReadOnlyList<Guid>> ListUserIdsWithActiveExpensesAsync(CancellationToken cancellationToken = default) =>

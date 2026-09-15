@@ -1,4 +1,5 @@
 using ControleDeGastos.Modules.Ledger.Domain;
+using ControleDeGastos.Modules.Ledger.Domain.Competence;
 using Microsoft.EntityFrameworkCore;
 
 namespace ControleDeGastos.Modules.Ledger.Infrastructure;
@@ -12,6 +13,10 @@ public sealed class LedgerDbContext(DbContextOptions<LedgerDbContext> options) :
     public const string Schema = "ledger";
 
     public DbSet<Transaction> Transactions => Set<Transaction>();
+
+    public DbSet<CompetenceSettings> CompetenceSettings => Set<CompetenceSettings>();
+
+    public DbSet<CompetenceClosure> CompetenceClosures => Set<CompetenceClosure>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

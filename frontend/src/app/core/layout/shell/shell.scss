@@ -83,3 +83,11 @@
 .nav-btn--active {
   color: var(--accent);
 }
+
+/* Janela da competencia, quando o dia de virada faz ela nao ser o mes do calendario. */
+.topbar__window {
+  display: block;
+  font-size: 10px;
+  line-height: 1.2;
+  opacity: 0.7;
+}

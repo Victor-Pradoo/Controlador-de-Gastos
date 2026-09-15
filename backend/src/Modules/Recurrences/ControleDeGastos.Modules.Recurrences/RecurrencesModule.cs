@@ -1,10 +1,12 @@
 using ControleDeGastos.Infrastructure.Shared.Modules;
 using ControleDeGastos.Infrastructure.Shared.Persistence;
+using ControleDeGastos.Modules.Ledger.Contracts;
 using ControleDeGastos.Modules.Recurrences.Application;
 using ControleDeGastos.Modules.Recurrences.Contracts;
 using ControleDeGastos.Modules.Recurrences.Domain;
 using ControleDeGastos.Modules.Recurrences.Infrastructure;
 using ControleDeGastos.Modules.Recurrences.Presentation;
+using ControleDeGastos.SharedKernel.Messaging;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -27,6 +29,9 @@ public sealed class RecurrencesModule : IModule
         services.AddScoped<IFixedExpenseRepository, FixedExpenseRepository>();
         services.AddScoped<FixedExpenseService>();
         services.AddScoped<IRecurrencesModuleApi>(sp => sp.GetRequiredService<FixedExpenseService>());
+
+        // Reconcilia as ocorrencias quando o usuario muda a regra de virada.
+        services.AddScoped<IIntegrationEventHandler<CompetenceRuleChangedIntegrationEvent>, CompetenceRuleChangedHandler>();
 
         services.AddHostedService<RecurrenceMaterializationWorker>();
     }

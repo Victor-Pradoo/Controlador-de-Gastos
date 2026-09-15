@@ -24,4 +24,24 @@ public static class LedgerErrors
 
     public static readonly Error DuplicatedExternalId =
         Error.Conflict("ledger.duplicated_external_id", "Este lancamento ja foi importado.");
+
+    public static readonly Error InvalidClosingDay =
+        Error.Validation(
+            "ledger.invalid_closing_day",
+            $"Dia de virada deve estar entre {Competence.CompetenceCalendar.MinClosingDay} e {Competence.CompetenceCalendar.MaxClosingDay}, ou vazio para usar o mes do calendario.");
+
+    public static readonly Error CompetenceNotCurrent =
+        Error.Validation("ledger.competence_not_current", "So a competencia corrente pode ser encerrada.");
+
+    public static readonly Error CompetenceAlreadyClosed =
+        Error.Conflict("ledger.competence_already_closed", "Esta competencia ja foi encerrada.");
+
+    public static readonly Error ExternalIdRequired =
+        Error.Validation("ledger.external_id_required", "Ocorrencia de gasto fixo precisa de um id externo para ser identificada.");
+
+    public static readonly Error NotRepositionable =
+        Error.Conflict("ledger.transaction_not_repositionable", "So lancamento gerado por gasto fixo pode ser reposicionado.");
+
+    public static readonly Error CompetenceNotClosed =
+        Error.NotFound("ledger.competence_not_closed", "Esta competencia nao esta encerrada.");
 }

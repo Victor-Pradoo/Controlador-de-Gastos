@@ -10,6 +10,9 @@ public interface ITransactionRepository
 
     Task<bool> ExistsByExternalIdAsync(Guid userId, string externalId, CancellationToken cancellationToken = default);
 
+    /// <summary>Rastreado: a ocorrencia de um gasto fixo pode precisar ser reposicionada.</summary>
+    Task<Transaction?> GetByExternalIdAsync(Guid userId, string externalId, CancellationToken cancellationToken = default);
+
     Task<int> DeleteByRecurrenceAsync(Guid userId, Guid recurrenceId, CancellationToken cancellationToken = default);
 
     void Add(Transaction transaction);

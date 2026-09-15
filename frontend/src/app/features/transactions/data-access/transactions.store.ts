@@ -1,5 +1,5 @@
 import { Injectable, computed, inject, signal } from '@angular/core';
-import { MonthService } from '../../../shared/month.service';
+import { MonthService } from '../../../core/competence/month.service';
 import { ToastService } from '../../../shared/ui/toast.service';
 import { CreateTransaction, Transaction, TransactionKind } from '../../../shared/models/transaction';
 import { TransactionsApi } from './transactions.api';

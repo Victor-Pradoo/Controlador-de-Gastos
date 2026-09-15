@@ -9,10 +9,12 @@
   <Folder Name="/src/Modules/Recurrences/" />
   <Folder Name="/src/Shared/" />
   <Folder Name="/tests/">
+    <Project Path="tests/ControleDeGastos.Api.DatabaseTests/ControleDeGastos.Api.DatabaseTests.csproj" />
     <Project Path="tests/ControleDeGastos.Api.IntegrationTests/ControleDeGastos.Api.IntegrationTests.csproj" />
     <Project Path="tests/ControleDeGastos.ArchitectureTests/ControleDeGastos.ArchitectureTests.csproj" />
     <Project Path="tests/ControleDeGastos.Modules.Budgeting.Tests/ControleDeGastos.Modules.Budgeting.Tests.csproj" />
     <Project Path="tests/ControleDeGastos.Modules.Ledger.Tests/ControleDeGastos.Modules.Ledger.Tests.csproj" />
+    <Project Path="tests/ControleDeGastos.Modules.Recurrences.Tests/ControleDeGastos.Modules.Recurrences.Tests.csproj" />
   </Folder>
   <Project Path="src/Api/ControleDeGastos.Api/ControleDeGastos.Api.csproj" />
   <Project Path="src/Modules/Banking/ControleDeGastos.Modules.Banking.Contracts/ControleDeGastos.Modules.Banking.Contracts.csproj" />

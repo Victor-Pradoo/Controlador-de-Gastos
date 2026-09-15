@@ -1,3 +1,4 @@
+using ControleDeGastos.Modules.Ledger.Contracts;
 using ControleDeGastos.SharedKernel.Primitives;
 using ControleDeGastos.SharedKernel.Results;
 
@@ -77,11 +78,37 @@ public sealed class FixedExpense : AggregateRoot<Guid>
 
     public void Deactivate() => IsActive = false;
 
-    /// <summary>Data do lancamento nesta competencia, respeitando meses de 28/30 dias.</summary>
-    public DateOnly OccurrenceDate(YearMonth month)
+    /// <summary>
+    /// Data do lancamento dentro da janela desta competencia.
+    ///
+    /// A competencia deixou de ser o mes do calendario: com dia de virada 25, a janela
+    /// de setembro vai de 25/08 a 24/09, e um fixo que vence no dia 28 tem que cair em
+    /// 28/08 - dentro da janela - e nao em 28/09, que ja e outubro. Por isso a busca
+    /// percorre os meses que a janela toca e devolve o primeiro vencimento que couber.
+    ///
+    /// Sem nenhum vencimento na janela (encurtada por um encerramento manual, por
+    /// exemplo), usa o ultimo dia dela: o gasto fixo continua na competencia certa.
+    /// </summary>
+    public DateOnly OccurrenceDate(CompetenceWindowDto window)
     {
-        var day = Math.Min(DayOfMonth, DateTime.DaysInMonth(month.Year, month.Month));
-        return new DateOnly(month.Year, month.Month, day);
+        var month = new YearMonth(window.Start.Year, window.Start.Month);
+        var lastMonth = new YearMonth(window.End.Year, window.End.Month);
+
+        while (month.CompareTo(lastMonth) <= 0)
+        {
+            // Mes curto usa o ultimo dia disponivel, como sempre fez.
+            var day = Math.Min(DayOfMonth, DateTime.DaysInMonth(month.Year, month.Month));
+            var candidate = new DateOnly(month.Year, month.Month, day);
+
+            if (window.Contains(candidate))
+            {
+                return candidate;
+            }
+
+            month = month.AddMonths(1);
+        }
+
+        return window.End;
     }
 
     /// <summary>
