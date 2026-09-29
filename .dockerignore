@@ -1,0 +1,37 @@
+# O contexto de build e a raiz do repositorio para os dois Dockerfiles, entao tudo
+# que nao entra na imagem precisa ser excluido aqui - cada arquivo a mais e tempo de
+# upload do contexto para o daemon.
+
+# Saidas de build: seriam sobrescritas dentro da imagem e podem carregar binarios
+# da arquitetura errada (Windows) para dentro de uma imagem Linux.
+**/bin/
+**/obj/
+**/node_modules/
+frontend/dist/
+frontend/.angular/
+
+# Controle de versao e metadados
+.git/
+.github/
+.gitignore
+.gitattributes
+.vs/
+.vscode/
+.idea/
+
+# Planejamento e documentacao: nao vao para runtime
+openspec/
+docs/
+legacy/
+.claude/
+CLAUDE.md
+*.md
+
+# Testes: a imagem de producao nao os roda (quem roda e o CI)
+backend/tests/
+
+# Ambiente local
+docker-compose.yml
+**/*.user
+TestResults/
+**/appsettings.Development.json

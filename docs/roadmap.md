@@ -11,7 +11,8 @@ O que existe hoje, o que falta para o MVP fechar e o que fica para depois.
 - Sincronização bancária de ponta a ponta contra o provedor falso, idempotente
 - App Angular com as 6 telas, lazy loading por feature, consumindo a API
 - 63 testes no back-end (unitários, arquitetura, integração) e 6 no front
-- CI no GitHub Actions para as duas pontas
+- CI no GitHub Actions para as duas pontas, incluindo build das imagens Docker
+- Dockerfiles e CD parametrizado (inerte até escolher um host) — ver [deploy.md](deploy.md)
 
 ## Para fechar o MVP
 

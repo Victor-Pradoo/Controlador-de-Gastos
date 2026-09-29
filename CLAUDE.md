@@ -221,9 +221,28 @@ Rules that mirror the backend's module boundaries:
 New feature scaffold: `npx ng generate component features/<name>/feature/<name>-page`,
 then add `<name>.routes.ts` and wire it into `app.routes.ts` via `loadChildren`.
 
+## Deploy
+
+Pipeline is written but **inert** — no host is provisioned and nothing costs anything
+until an environment's secrets are filled. See `docs/deploy.md` for the runbook.
+
+```bash
+docker compose --profile full up --build   # whole stack as in production, :8080
+```
+
+Two deployables (`backend/Dockerfile`, `frontend/Dockerfile`), unified by the nginx in
+the frontend image, which proxies `/api` to the API — that is what makes the
+production `apiBaseUrl: '/api'` work and why there is no CORS in production.
+
+`.github/workflows/cd.yml` is manual (`workflow_dispatch`) on purpose: there is no
+login yet, so automatic deploys would risk exposing data. It runs
+verify → publish (ghcr.io) → migrate → deploy. Migrations are an explicit pipeline
+step, never `Database:AutoMigrate` in production.
+
 ## CI
 
 `.github/workflows/ci.yml` runs on push to `main` and on PRs: backend job does
 `dotnet restore/build/test` (Release) from `backend/`, including the architecture
 tests; frontend job does `npm ci`, `npm run build`, `npx ng test --watch=false
---browsers=ChromeHeadless` from `frontend/`.
+--browsers=ChromeHeadless` from `frontend/`; an `images` job then builds both Docker
+images without pushing, so a broken Dockerfile fails in CI and not at deploy time.

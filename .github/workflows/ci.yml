@@ -35,6 +35,9 @@ jobs:
         with:
           dotnet-version: '10.0.x'
 
+      # Sem cache de NuGet: o `cache: true` do setup-dotnet exige packages.lock.json,
+      # que este repositorio nao usa, e falha quando o glob nao casa nada. Para ligar,
+      # rode antes `dotnet restore --use-lock-file` e versione os lock files.
       - name: Restore
         run: dotnet restore
         working-directory: backend
@@ -72,3 +75,34 @@ jobs:
       - name: Test
         run: npx ng test --watch=false --browsers=ChromeHeadless
         working-directory: frontend
+
+  # Constroi as duas imagens sem publicar nada. So assim os Dockerfiles continuam
+  # validos: um Dockerfile que ninguem constroi quebra em silencio e so aparece na
+  # hora do deploy, que e o pior momento possivel.
+  images:
+    runs-on: ubuntu-latest
+    needs: [backend, frontend]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: docker/setup-buildx-action@v3
+
+      - name: Build da imagem da API
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: backend/Dockerfile
+          push: false
+          tags: controle-gastos-api:ci
+          cache-from: type=gha,scope=api
+          cache-to: type=gha,scope=api,mode=max
+
+      - name: Build da imagem do front
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: frontend/Dockerfile
+          push: false
+          tags: controle-gastos-web:ci
+          cache-from: type=gha,scope=web
+          cache-to: type=gha,scope=web,mode=max

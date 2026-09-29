@@ -1,6 +1,18 @@
-# Opcional. No Windows, o LocalDB que vem com o Visual Studio já atende e não
-# exige nada disto — use este compose se quiser um SQL Server isolado, ou para
-# rodar em Linux/macOS.
+# Duas maneiras de usar este arquivo:
+#
+#   docker compose up -d sqlserver     -> so o banco, para rodar API e front na mao.
+#                                         No Windows o LocalDB do Visual Studio ja
+#                                         atende e nem isto e necessario.
+#
+#   docker compose --profile full up --build
+#                                      -> a pilha inteira como em producao:
+#                                         nginx serve o Angular e faz proxy de /api
+#                                         para a API, tudo na mesma origem.
+#                                         Abra http://localhost:8080
+#
+# Rodar o perfil "full" antes de um deploy e a forma mais barata de descobrir que
+# um Dockerfile quebrou - o mesmo build roda no CI.
+
 services:
   sqlserver:
     image: mcr.microsoft.com/mssql/server:2022-latest
@@ -24,6 +36,52 @@ services:
       timeout: 5s
       retries: 10
       start_period: 30s
+
+  api:
+    profiles: ["full"]
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    container_name: controle-gastos-api
+    restart: unless-stopped
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_HTTP_PORTS: "8080"
+      # O duplo sublinhado e como o .NET mapeia hierarquia de configuracao para
+      # variavel de ambiente: ConnectionStrings__Database == ConnectionStrings:Database.
+      ConnectionStrings__Database: "Server=sqlserver,1433;Database=ControleDeGastos;User Id=sa;Password=Dev@Password123;TrustServerCertificate=True;MultipleActiveResultSets=True"
+      # Aqui ligado por conveniencia local. Em producao as migrations sao um passo
+      # explicito do pipeline - ver docs/deploy.md.
+      Database__AutoMigrate: "true"
+      Banking__Pluggy__UseFakeProvider: "true"
+    expose:
+      - "8080"
+    # TODO(human): definir o healthcheck da API.
+    #
+    # Hoje o compose so sabe que o container "iniciou", nunca que a API esta pronta
+    # para atender - por isso o nginx sobe antes e as primeiras requisicoes podem
+    # bater numa API que ainda esta carregando.
+    #
+    # A imagem e Debian e tem curl disponivel. A API expoe /health (sem o prefixo
+    # /api), que responde sem tocar o banco.
+
+  web:
+    profiles: ["full"]
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    container_name: controle-gastos-web
+    restart: unless-stopped
+    depends_on:
+      - api
+    environment:
+      API_UPSTREAM: "http://api:8080"
+      NGINX_PORT: "8080"
+    ports:
+      - "8080:8080"
 
 volumes:
   sqlserver-data:
