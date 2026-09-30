@@ -9,7 +9,7 @@ public static class ModuleDbContextExtensions
     public const string ConnectionStringName = "Database";
 
     /// <summary>
-    /// Registra o DbContext de um modulo isolado no seu proprio schema do SQL Server,
+    /// Registra o DbContext de um modulo isolado no seu proprio schema do PostgreSQL,
     /// com tabela de historico de migrations tambem separada. Um banco, N schemas:
     /// os modulos nao enxergam tabelas uns dos outros.
     /// </summary>
@@ -24,12 +24,12 @@ public static class ModuleDbContextExtensions
                 $"Connection string '{ConnectionStringName}' nao configurada. Veja backend/README.md.");
 
         services.AddDbContext<TContext>(options =>
-            options.UseSqlServer(connectionString, sqlServer =>
+            options.UseNpgsql(connectionString, npgsql =>
             {
-                sqlServer.MigrationsHistoryTable("__EFMigrationsHistory", schema);
-                sqlServer.EnableRetryOnFailure(3);
-            }));
-
+                npgsql.MigrationsHistoryTable("__EFMigrationsHistory", schema);
+                npgsql.EnableRetryOnFailure(3);
+            })
+        );
         return services;
     }
 }

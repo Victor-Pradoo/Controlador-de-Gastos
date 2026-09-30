@@ -14,7 +14,8 @@ public sealed class LedgerMappingTests
     private static LedgerDbContext CreateContext()
     {
         var options = new DbContextOptionsBuilder<LedgerDbContext>()
-            .UseSqlServer(@"Server=(localdb)\MSSQLLocalDB;Database=ControleDeGastosTest;Trusted_Connection=True;TrustServerCertificate=True")
+            .UseNpgsql("Host=localhost;Port=5432;Database=controledegastos;Username=postgres;Password=Dev@Password123")
+
             .Options;
 
         return new LedgerDbContext(options);

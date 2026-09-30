@@ -1,6 +1,6 @@
 # Duas maneiras de usar este arquivo:
 #
-#   docker compose up -d sqlserver     -> so o banco, para rodar API e front na mao.
+#   docker compose up -d postgres     -> so o banco, para rodar API e front na mao.
 #                                         No Windows o LocalDB do Visual Studio ja
 #                                         atende e nem isto e necessario.
 #
@@ -14,28 +14,27 @@
 # um Dockerfile quebrou - o mesmo build roda no CI.
 
 services:
-  sqlserver:
-    image: mcr.microsoft.com/mssql/server:2022-latest
+  postgres:
+    image: postgres:16-alpine
     container_name: controle-gastos-db
     restart: unless-stopped
     environment:
-      ACCEPT_EULA: "Y"
-      MSSQL_SA_PASSWORD: "Dev@Password123"
-      MSSQL_PID: Developer
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Dev@Password123
+      POSTGRES_DB: controledegastos
     ports:
-      - "1433:1433"
+      - "5432:5432"
     volumes:
-      - sqlserver-data:/var/opt/mssql
+      - postgres-data:/var/lib/postgresql/data
     healthcheck:
       test:
         [
           "CMD-SHELL",
-          "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P \"$$MSSQL_SA_PASSWORD\" -C -Q 'SELECT 1' || exit 1",
+          "pg_isready -U postgres -d controledegastos",
         ]
-      interval: 10s
+      interval: 5s
       timeout: 5s
       retries: 10
-      start_period: 30s
 
   api:
     profiles: ["full"]
@@ -45,28 +44,21 @@ services:
     container_name: controle-gastos-api
     restart: unless-stopped
     depends_on:
-      sqlserver:
+      postgres:
         condition: service_healthy
     environment:
       ASPNETCORE_ENVIRONMENT: Production
       ASPNETCORE_HTTP_PORTS: "8080"
       # O duplo sublinhado e como o .NET mapeia hierarquia de configuracao para
       # variavel de ambiente: ConnectionStrings__Database == ConnectionStrings:Database.
-      ConnectionStrings__Database: "Server=sqlserver,1433;Database=ControleDeGastos;User Id=sa;Password=Dev@Password123;TrustServerCertificate=True;MultipleActiveResultSets=True"
+      ConnectionStrings__Database: "Host=postgres;Port=5432;Database=controledegastos;Username=postgres;Password=Dev@Password123"
       # Aqui ligado por conveniencia local. Em producao as migrations sao um passo
       # explicito do pipeline - ver docs/deploy.md.
       Database__AutoMigrate: "true"
       Banking__Pluggy__UseFakeProvider: "true"
     expose:
       - "8080"
-    # TODO(human): definir o healthcheck da API.
-    #
-    # Hoje o compose so sabe que o container "iniciou", nunca que a API esta pronta
-    # para atender - por isso o nginx sobe antes e as primeiras requisicoes podem
-    # bater numa API que ainda esta carregando.
-    #
-    # A imagem e Debian e tem curl disponivel. A API expoe /health (sem o prefixo
-    # /api), que responde sem tocar o banco.
+
 
   web:
     profiles: ["full"]
@@ -84,4 +76,4 @@ services:
       - "8080:8080"
 
 volumes:
-  sqlserver-data:
+  postgres-data:

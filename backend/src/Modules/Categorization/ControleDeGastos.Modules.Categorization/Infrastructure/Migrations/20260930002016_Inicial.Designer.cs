@@ -3,16 +3,16 @@ using System;
 using ControleDeGastos.Modules.Categorization.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
 namespace ControleDeGastos.Modules.Categorization.Infrastructure.Migrations
 {
     [DbContext(typeof(CategorizationDbContext))]
-    [Migration("20260828232106_Inicial")]
+    [Migration("20260930002016_Inicial")]
     partial class Inicial
     {
         /// <inheritdoc />
@@ -22,34 +22,34 @@ namespace ControleDeGastos.Modules.Categorization.Infrastructure.Migrations
             modelBuilder
                 .HasDefaultSchema("categorization")
                 .HasAnnotation("ProductVersion", "10.0.11")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+                .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("ControleDeGastos.Modules.Categorization.Domain.CategoryRule", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Category")
                         .IsRequired()
                         .HasMaxLength(60)
-                        .HasColumnType("nvarchar(60)");
+                        .HasColumnType("character varying(60)");
 
                     b.Property<DateTimeOffset>("CreatedAt")
-                        .HasColumnType("datetimeoffset");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Keyword")
                         .IsRequired()
                         .HasMaxLength(80)
-                        .HasColumnType("nvarchar(80)");
+                        .HasColumnType("character varying(80)");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 

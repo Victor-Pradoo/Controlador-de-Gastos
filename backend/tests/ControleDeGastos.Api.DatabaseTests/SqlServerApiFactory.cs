@@ -27,12 +27,12 @@ namespace ControleDeGastos.Api.DatabaseTests;
 /// </summary>
 public sealed class SqlServerApiFactory : WebApplicationFactory<Program>
 {
-    private const string LocalDbFallback =
-        "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=ControleDeGastos_IntegrationTests;"
-        + "Integrated Security=True;MultipleActiveResultSets=True;Encrypt=True;TrustServerCertificate=True";
+    private const string LocalPostgresFallback =
+    "Host=localhost;Port=5432;Database=controledegastos_integrationtests;"
+    + "Username=postgres;Password=Dev@Password123";
 
     public static string ConnectionString =>
-        Environment.GetEnvironmentVariable("ConnectionStrings__Database") ?? LocalDbFallback;
+    Environment.GetEnvironmentVariable("ConnectionStrings__Database") ?? LocalPostgresFallback;
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
