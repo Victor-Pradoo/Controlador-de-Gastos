@@ -22,7 +22,7 @@ public sealed class LedgerQueriesTests
     private static LedgerQueries Build(ICompetenceCalendarProvider calendars)
     {
         var options = new DbContextOptionsBuilder<LedgerDbContext>()
-            .UseSqlServer("Server=nao-conecta;Database=nao-usado;Trusted_Connection=True")
+            .UseNpgsql("Host=nao-conecta;Database=nao-usado;Username=nao-usado")
             .Options;
 
         return new LedgerQueries(new LedgerDbContext(options), calendars);

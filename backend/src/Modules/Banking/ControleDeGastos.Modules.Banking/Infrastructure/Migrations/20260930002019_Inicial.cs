@@ -19,15 +19,15 @@ namespace ControleDeGastos.Modules.Banking.Infrastructure.Migrations
                 schema: "banking",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Provider = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: false),
-                    ExternalItemId = table.Column<string>(type: "nvarchar(120)", maxLength: 120, nullable: false),
-                    InstitutionName = table.Column<string>(type: "nvarchar(120)", maxLength: 120, nullable: false),
-                    Status = table.Column<int>(type: "int", nullable: false),
-                    LastSyncedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
-                    CreatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    LastError = table.Column<string>(type: "nvarchar(400)", maxLength: 400, nullable: true)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Provider = table.Column<string>(type: "character varying(40)", maxLength: 40, nullable: false),
+                    ExternalItemId = table.Column<string>(type: "character varying(120)", maxLength: 120, nullable: false),
+                    InstitutionName = table.Column<string>(type: "character varying(120)", maxLength: 120, nullable: false),
+                    Status = table.Column<int>(type: "integer", nullable: false),
+                    LastSyncedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
+                    CreatedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                    LastError = table.Column<string>(type: "character varying(400)", maxLength: 400, nullable: true)
                 },
                 constraints: table =>
                 {

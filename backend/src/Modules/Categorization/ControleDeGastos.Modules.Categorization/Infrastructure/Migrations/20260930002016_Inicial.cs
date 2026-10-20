@@ -19,12 +19,12 @@ namespace ControleDeGastos.Modules.Categorization.Infrastructure.Migrations
                 schema: "categorization",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Keyword = table.Column<string>(type: "nvarchar(80)", maxLength: 80, nullable: false),
-                    Category = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: false),
-                    Priority = table.Column<int>(type: "int", nullable: false),
-                    CreatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Keyword = table.Column<string>(type: "character varying(80)", maxLength: 80, nullable: false),
+                    Category = table.Column<string>(type: "character varying(60)", maxLength: 60, nullable: false),
+                    Priority = table.Column<int>(type: "integer", nullable: false),
+                    CreatedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
