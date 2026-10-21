@@ -39,7 +39,7 @@ internal sealed class TransactionConfiguration : IEntityTypeConfiguration<Transa
         // Idempotencia da sincronizacao bancaria.
         builder.HasIndex(t => new { t.UserId, t.ExternalId })
             .IsUnique()
-            .HasFilter("[ExternalId] IS NOT NULL");
+            .HasFilter("\"ExternalId\" IS NOT NULL");
 
         builder.HasIndex(t => new { t.UserId, t.RecurrenceId });
     }
